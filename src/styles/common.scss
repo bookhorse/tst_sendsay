@@ -1,0 +1,69 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+$big-caption-fontsize: 30px;
+$big-caption-lineheight: 40px;
+
+body {
+  background-color: #E5E5E5;
+}
+
+.logo {
+  margin: 20px;
+}
+
+.main-container {
+  max-width: 800px;
+  padding-top: 20px;
+}
+
+.form-container {
+  background-color: #fff;
+  height: 240px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.message-container {
+}
+
+.message-container__header {
+  font-size: 24px;
+  line-height: 30px;
+  margin: 20px 0 20px 0;
+}
+
+.sending-progress {
+  margin: 53px;
+  text-align: center;
+}
+
+.sending-progress__header {
+  font-size: $big-caption-fontsize;
+  line-height: $big-caption-lineheight;
+}
+
+.form-container__header {
+  font-size: $big-caption-fontsize;
+  line-height: $big-caption-lineheight;
+  margin: 30px 0 30px 30px;
+}
+
+.message-list__header {
+  opacity: 0.4;
+}
+
+.message-list__crap {
+}
+
+.message-list__item--inprogress {
+  opacity: 0.4;
+}
+
+.message-list__item--error {
+  color: #FF6666;
+}
+
+.message-list__item--success {
+  color: #03A100;
+}
+
