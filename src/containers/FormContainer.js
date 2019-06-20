@@ -7,7 +7,7 @@ import { sendMessage } from '../store/actions/api'
 
 class FormContainer extends React.Component { 
   render () {
-    const sendMsg = <SendingProgress email="faggot" />;
+    const sendMsg = <SendingProgress email={this.props.sendTo} />;
     return <>{
       this.props.sendStatus === 0
       ? <SendsayForm onSend={this.props.send} sendStatus={1} />
@@ -21,9 +21,10 @@ FormContainer.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-  const { sendStatus } = state.default;
+  const { sendStatus, sendTo } = state.default;
   return {
-    sendStatus
+    sendStatus,
+    sendTo
   }
 }
 

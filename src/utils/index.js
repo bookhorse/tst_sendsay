@@ -13,3 +13,16 @@ export const createCookie = (name, value, days) => {
   }
   document.cookie = name + "=" + value + expires + "; path=/";
 }
+
+export const updateObjectInArray = (array, action) => {
+  return array.map((item, index) => {
+    if (index !== action.index) {
+      return item
+    }
+
+    return {
+      ...item,
+      ...action.item
+    }
+  })
+}

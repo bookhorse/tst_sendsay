@@ -16,7 +16,7 @@ const SendingProgress = ({ email }) => (
 );
 
 SendingProgress.propTypes = {
-  email: PropTypes.string.isRequired
+  email: PropTypes.string
 }
 
 export default SendingProgress;

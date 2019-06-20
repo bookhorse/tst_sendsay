@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { Form, Button, Container, Col } from 'react-bootstrap';
+import UploadBox from './UploadBox'
 import * as Yup from 'yup';
 
 const cantBeEmpty = "Не может быть пустым";
@@ -34,15 +35,34 @@ const validSchema = Yup.object({
 });
 
 const initialVals = {
-  senderName: '',
+  senderName: 'sender',
   senderEmail: 'bestpony@horsefucker.org',
-  receiverName: '',
+  receiverName: 'receiver',
   receiverEmail: 'fgsfds123@mail.ru',
-  theme: '',
-  textarea: ''
+  theme: 'тема',
+  textarea: 'длинный текстдлинный текстдлинный текстдлинный текстдлинный текстдлинный текстдлинный текст'
 };
 
 class SendsayForm extends React.Component { 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showUpload: false
+    };
+  }
+
+  attachFile (e) {
+    e.preventDefault();
+    this.setState({
+      showUpload: !this.state.showUpload
+    });
+  }
+  handleFiles (ffs) {
+    // FIXME move to upper component
+    console.log('handle files ', ffs)
+  }
+
   render () {
     const myform = (props) => {
       const {
@@ -144,8 +164,10 @@ class SendsayForm extends React.Component {
               <Form.Control.Feedback type="invalid">{errors.textarea}</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
+          { this.state.showUpload ? <UploadBox onFilesChange={this.handleFiles} /> : null }
           <Form.Row>
-            <a href="#" className="sendform__attachfile" onClick="">📎 Прикрепить файл</a>
+            <Button className="sendform__attachfile"  onClick={this.attachFile.bind(this)}>
+              <span role="img" aria-label="paperclip">📎</span>Прикрепить файл</Button>
           </Form.Row>
           <Button
             variant="primary"
@@ -160,7 +182,7 @@ class SendsayForm extends React.Component {
     }
 
     return (
-      <Container> 
+      <Container className="sendform__rootcontainer"> 
         <h1 className="sendform__header">Отправлялка сообщений</h1>
         <Formik
           initialValues={initialVals}
@@ -171,7 +193,8 @@ class SendsayForm extends React.Component {
           render={myform}
         />
       </Container>
-  )}
+    )}
+
 }
 
 SendsayForm.propTypes = {

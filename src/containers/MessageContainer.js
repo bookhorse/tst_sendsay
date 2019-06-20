@@ -9,7 +9,7 @@ class MessageContainer extends React.Component {
     const list = <MessageList messages={this.props.messages} />
     const emptyList = (<p>Сообщения еще не отправлялись</p>);
     return(
-      <Container>
+      <Container className="message-container">
         <Row>
           <h2 className="message-container__header">Отправленные сообщения</h2>
         </Row>

@@ -36,6 +36,19 @@ export const ssSendMsg = async (req) => {
   } else return Promise.reject('Ошибка авторизации');
 }
 
+export const ssCheck = async (track) => {
+  if (sendsay.session) {
+    const req = {
+      "action": "track.get",
+      "id": track,
+      "session": sendsay.session
+    };
+    const r = await sendsay.request(req);
+    const status = r.obj.status;
+    return Promise.resolve(status);
+  } else return Promise.reject('Ошибка авторизации');
+}
+
 export const sendMessage = ({
     theme,
     senderName,
@@ -67,12 +80,85 @@ export const sendMessage = ({
     "session": sendsay.session
   };
   return dispatch => {
+    dispatch(setSendStatus(1, receiverEmail))
     return ssSendMsg(req)
-      .then( (id) => console.log(id, 'ok'))
-      .catch( (err) => dispatch(showError(err)))
+      .then( (id) => {
+        dispatch(addMessage2List(id, theme));
+        dispatch(startCheckMessages());
+      })
+      .catch( (err) => { 
+        console.log(err);
+        dispatch(setSendStatus(0, receiverEmail))
+        return dispatch(addMessage2List(undefined, theme, err));
+      })
   }
-
 }
+
+
+export const addMessage2List = (track, text, err) => {
+  const sts = !err ? 0 : -123;
+
+  return {
+    type: Types.ADDMESSAGE,
+    payload: {
+      track,
+      text,
+      date: new Date().toLocaleDateString("ru-RU"),
+      error: err,
+      status: sts
+    }
+  }
+}
+
+export const changeMessage = (msg, status) => {
+  return {
+    type: Types.CHGMESSAGE,
+    payload: {
+      msg,
+      status
+    }
+  }
+}
+
+
+const checkMsg = (msg) => {
+  return dispatch => {
+    ssCheck(msg.track)
+      .then((newstatus) => {
+        if (Number(newstatus) !== Number(msg.status)) {
+          dispatch(changeMessage(msg, Number(newstatus)));
+          dispatch(setSendStatus(0))
+        } else {
+          console.log('still sending')
+          dispatch(startCheckMessages())
+        }
+      })
+      .catch((err) => dispatch(showError(err)))
+  }
+}
+
+const chkInterval = 2500;
+export const checkMessages = ( dispatch, getState ) => {
+  const state = getState();
+  const msgs = state.default.messages.filter((x) => x.status > -1 && x.track);
+  if (msgs.length) {
+    dispatch(checkMsg(msgs[0]));
+  }
+}
+
+export const startCheckMessages = () => {
+  return (dispatch, getState) => {
+    return setTimeout(() => checkMessages(dispatch, getState), chkInterval);
+  }
+}
+
+export const setSendStatus = (status, sendTo) => ({
+  type: Types.SETSENDSTATUS,
+  payload: {
+    status,
+    sendTo
+  }
+})
 
 export const showError = (err) => ({
   type: Types.ERROR,
