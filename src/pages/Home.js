@@ -11,7 +11,6 @@ function HomePage() {
       <Row className="logo">
         <Logo />
       </Row>
-
       <Row className="form-container">
         <FormContainer />
       </Row>

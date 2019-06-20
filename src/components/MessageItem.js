@@ -9,7 +9,8 @@ const status2text = (status) => {
 }
 
 const trimTheme = (str) => {
-  return str + ' pidor'; // TODO
+  const maxLength = 40;
+  return str.length < maxLength ?  str : str.substring(0, maxLength) + '...';
 }
 
 function MessageItem({item}) {
