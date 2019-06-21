@@ -6,7 +6,15 @@ module.exports = {
   },
   "rules": {
     "no-console":0,
-    "func-names":0 
+    "func-names":0,
+    'no-unused-vars': [
+      'error',
+      {
+        'argsIgnorePattern': "^_",
+        'varsIgnorePattern': "^_",
+      }
+    ],
+
   },
   "env": {
     "browser": true,
