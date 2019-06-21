@@ -8,15 +8,18 @@ import { sendMessage } from '../store/actions/api'
 class FormContainer extends React.Component { 
   render () {
     const sendMsg = <SendingProgress email={this.props.sendTo} />;
+    const form = <SendsayForm
+      onSend={this.props.send}
+      sendStatus={1} />;
     return <>{
-      this.props.sendStatus === 0
-      ? <SendsayForm onSend={this.props.send} sendStatus={1} />
-      : sendMsg
+      this.props.sendStatus === 0 ? form : sendMsg
     }</>
-}}
+  }
+}
 
 FormContainer.propTypes = {
   sendStatus: PropTypes.number.isRequired,
+  sendTo: PropTypes.string.isRequired,
   send: PropTypes.func.isRequired
 }
 
@@ -30,7 +33,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    send: event => dispatch(sendMessage(event)),
+    send: (values, files) => dispatch(sendMessage(values, files)),
   }
 }
 

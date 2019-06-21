@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { Form, Button, Container, Col } from 'react-bootstrap';
-import UploadBox from './UploadBox'
+import UploadBox from './UploadBox';
+import FilesList from './FilesList';
 import * as Yup from 'yup';
 
 const cantBeEmpty = "Не может быть пустым";
@@ -35,12 +36,12 @@ const validSchema = Yup.object({
 });
 
 const initialVals = {
-  senderName: 'sender',
-  senderEmail: 'bestpony@horsefucker.org',
-  receiverName: 'receiver',
+  senderName: 'sendsaytester',
+  senderEmail: 'sendsaytester@hitler.rocks',
+  receiverName: '',
   receiverEmail: 'fgsfds123@mail.ru',
-  theme: 'тема',
-  textarea: 'длинный текстдлинный текстдлинный текстдлинный текстдлинный текстдлинный текстдлинный текст'
+  theme: '',
+  textarea: ''
 };
 
 class SendsayForm extends React.Component { 
@@ -48,19 +49,49 @@ class SendsayForm extends React.Component {
     super(props);
 
     this.state = {
-      showUpload: false
+      showUpload: false,
+      files: []
     };
   }
 
-  attachFile (e) {
-    e.preventDefault();
+  attachFile (_e) {
     this.setState({
-      showUpload: !this.state.showUpload
+      showUpload: true
     });
   }
-  handleFiles (ffs) {
-    // FIXME move to upper component
-    console.log('handle files ', ffs)
+
+  deleteFile (file) {
+    const idx = this.state.files.indexOf(file);
+    if (idx === -1) return;
+    const newFiles = [...this.state.files];
+    newFiles.splice(idx, 1);
+    this.setState({
+      files: newFiles
+    })
+  }
+
+  pushFile(name, e) {
+    const base64data = e.target.result.split(',')[1];
+      
+    const file = {
+      name,
+      data: base64data
+    }
+    this.setState({
+      files: [...this.state.files, file]
+    });
+  }
+
+  handleFiles (files) {
+    this.setState({
+      showUpload: false
+    });
+    // eslint-disable-next-line
+    for (const [_, file] of Object.entries(files)) {
+      const reader = new FileReader()
+      reader.onload = this.pushFile.bind(this, file.name)
+      reader.readAsDataURL(file)
+    }
   }
 
   render () {
@@ -73,7 +104,7 @@ class SendsayForm extends React.Component {
         isValid,
         touched,
         errors,
-} = props;
+      } = props;
       return (
         <Form noValidate onSubmit={handleSubmit} className="sendform_form">
           <Form.Label className="sendform__label">От кого</Form.Label>
@@ -164,9 +195,12 @@ class SendsayForm extends React.Component {
               <Form.Control.Feedback type="invalid">{errors.textarea}</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
-          { this.state.showUpload ? <UploadBox onFilesChange={this.handleFiles} /> : null }
           <Form.Row>
-            <Button className="sendform__attachfile"  onClick={this.attachFile.bind(this)}>
+            <FilesList files={this.state.files} onDelete={this.deleteFile.bind(this)} />
+            { this.state.showUpload ? <UploadBox onFilesChange={this.handleFiles.bind(this)} /> : null }
+          </Form.Row>
+          <Form.Row>
+            <Button type="button" className="sendform__attachfile"  onClick={this.attachFile.bind(this)}>
               <span role="img" aria-label="paperclip">📎</span>Прикрепить файл</Button>
           </Form.Row>
           <Button
@@ -188,7 +222,7 @@ class SendsayForm extends React.Component {
           initialValues={initialVals}
           validationSchema={validSchema}
           onSubmit={values => {
-            this.props.onSend(values)
+            this.props.onSend(values, this.state.files)
           }}
           render={myform}
         />

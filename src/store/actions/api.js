@@ -56,7 +56,16 @@ export const sendMessage = ({
     receiverName,
     receiverEmail,
     textarea
-}) => {
+}, files) => {
+
+  const attaches = files.map(f => ({
+    name: f.name,
+    content: f.data,
+    encoding: "base64"
+  }))
+
+  console.log(attaches)
+
   const req = {
     "action" : "issue.send.test",
     "letter" : {
@@ -65,13 +74,10 @@ export const sendMessage = ({
       "from.email" : senderEmail,
       "to.name" : receiverName,
       "message": { text : textarea },
-      "attaches": [ 
-        //  {
+      "attaches": attaches, 
         //  "name" : "имя файла",
         //  "content": "содержимое файла закодированное base64",
         //  "encoding" : "base64",
-        // }
-      ]
     },
     "sendwhen": "test",
     "mca": [
@@ -89,6 +95,7 @@ export const sendMessage = ({
       .catch( (err) => { 
         console.log(err);
         dispatch(setSendStatus(0, receiverEmail))
+        dispatch(showError(err.id + ' ' + err.explain))
         return dispatch(addMessage2List(undefined, theme, err));
       })
   }
@@ -156,7 +163,7 @@ export const setSendStatus = (status, sendTo) => ({
   type: Types.SETSENDSTATUS,
   payload: {
     status,
-    sendTo
+    sendTo: sendTo ? sendTo : ""
   }
 })
 
