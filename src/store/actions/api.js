@@ -1,7 +1,6 @@
 import * as Types from './types'
 import { createCookie } from '../../utils'
-// import Sendsay from 'sendsay-api'; // FIXME
-const Sendsay = require('sendsay-api');
+import Sendsay from 'sendsay-api/dist/sendsay-api.cjs.js'; // FIXME lol
 
 export const sendsay = new Sendsay();
 
