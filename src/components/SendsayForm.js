@@ -201,7 +201,7 @@ class SendsayForm extends React.Component {
           </Form.Row>
           <Form.Row>
             <Button type="button" className="sendform__attachfile"  onClick={this.attachFile.bind(this)}>
-              <span role="img" aria-label="paperclip">📎</span>Прикрепить файл</Button>
+              <span role="img" aria-label="paperclip">&#x1f4ce;</span>Прикрепить файл</Button>
           </Form.Row>
           <Button
             variant="primary"

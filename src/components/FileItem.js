@@ -10,7 +10,7 @@ const shortname = (str) => {
   if (filename.length > limit) {
     filename = filename.substring(0, limit) + '...';
   }
-  return filename + extension;
+  return filename + (extension.length ? ('.' + extension) : '');
 }
 
 function FileItem({file, onDelete}) {
@@ -23,14 +23,14 @@ function FileItem({file, onDelete}) {
 
   return (
     <div className="file-item">
-      <div className="file-item__icon"><span role="img" aria-label="paperclip">📎</span></div>
+      <div className="file-item__icon"><span role="img" aria-label="paperclip">&#x1f4ce;</span></div>
       <div className="file-item__filename">{ filename }</div>
       <div className="file-item__del">
         <button 
           type="button"
           onClick={handleDelete}
           className="file-item__delbtn">
-          <span role="img" aria-label="garbage can">🗑️</span>Удалить</button>
+          <span role="img" aria-label="garbage can">&#x1f5d1;&#xfe0f;</span>Удалить</button>
       </div>
     </div>
   );
