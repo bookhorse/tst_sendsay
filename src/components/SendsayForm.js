@@ -106,7 +106,12 @@ class SendsayForm extends React.Component {
         errors,
       } = props;
       return (
-        <Form noValidate onSubmit={handleSubmit} className="sendform_form">
+        <Form
+          noValidate
+          onSubmit={handleSubmit} 
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className="sendform_form">
           <Form.Label className="sendform__label">От кого</Form.Label>
           <Form.Row>
             <Col className="sendform__compact-col">
@@ -114,8 +119,6 @@ class SendsayForm extends React.Component {
                 <Form.Control
                   name="senderName"
                   value={values.senderName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   isInvalid={touched.senderName && errors.senderName}
                   className="sendfrom__left-input"
                   placeholder="Имя" />
@@ -128,8 +131,6 @@ class SendsayForm extends React.Component {
                   name="senderEmail"
                   type="email"
                   value={values.senderEmail}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   isInvalid={touched.senderEmail && errors.senderEmail}
                   className="sendfrom__right-input"
                   placeholder="Email" />
@@ -144,8 +145,6 @@ class SendsayForm extends React.Component {
                 <Form.Control
                   name="receiverName"
                   value={values.receiverName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   isInvalid={touched.receiverName && errors.receiverName}
                   className="sendfrom__left-input"
                   placeholder="Имя" />
@@ -158,8 +157,6 @@ class SendsayForm extends React.Component {
                   name="receiverEmail"
                   type="email"
                   value={values.receiverEmail}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   isInvalid={touched.receiverEmail && errors.receiverEmail}
                   className="sendfrom__right-input"
                   placeholder="Email" />
@@ -173,9 +170,7 @@ class SendsayForm extends React.Component {
               <Form.Control
                 name="theme"
                 value={values.theme}
-                onBlur={handleBlur}
                 isInvalid={touched.theme && errors.theme}
-                onChange={handleChange}
                 placeholder="Тема" />
               <Form.Control.Feedback type="invalid">{errors.theme}</Form.Control.Feedback>
             </Form.Group>
@@ -187,9 +182,7 @@ class SendsayForm extends React.Component {
                 as="textarea"
                 name="textarea"
                 value={values.textarea}
-                onBlur={handleBlur}
                 isInvalid={touched.textarea && errors.textarea}
-                onChange={handleChange}
                 placeholder="Текст вашего сообщения"
                 rows="4" />
               <Form.Control.Feedback type="invalid">{errors.textarea}</Form.Control.Feedback>
